@@ -1,0 +1,4 @@
+venv/
+.env
+.env.pw
+.env.api_pw

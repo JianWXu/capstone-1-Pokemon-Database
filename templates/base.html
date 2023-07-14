@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+
+    <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/popper"></script>
+    <script src="https://unpkg.com/bootstrap"></script>
+    <script src="https://kit.fontawesome.com/38def9ec7f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/stylesheets/styles.css">
+    
+
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <nav class="navbar navbar-expand">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+              <img src="/static/images/logo.png" alt="logo">
+            </a>
+          </div>
+
+          <ul class="nav navbar-nav navbar-right">
+            {% if request.endpoint != None %}
+            
+            <li>
+              <form class="navbar-form navbar-right" action="/">
+                <input name="q" class="form-control" placeholder="Search Cards" id="search">
+                <button class="btn btn-default" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </form>
+            </li>
+            {% endif %}
+            {% if not g.user %}
+            <li><a href="/signup">Sign up</a></li>
+            <li><a href="/login">Log in</a></li>
+            {% else %}
+            <li>
+              <a href="/users/{{ g.user.id }}">
+                <i class="fa-solid fa-user"></i>
+              </a>
+            </li>
+            <li><a href="/">Postings</a></li>
+            <li><a href="/logout">Log out</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+      <div class="container">
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      
+        {% block content %}
+        {% endblock %}
+      
+      </div>
+</body>
+</html>
