@@ -101,10 +101,16 @@ nav form.navbar-form {
   border: 2px solid #007bff;
 }
 
-.onboarding > .navbar {
+h1 {
+  color: #a29cbb;
+  font-size: 1.1em;
+}
+
+/* .onboarding > .navbar {
   background-image: url("/static/images/nav-bg.png");
   background-size: 100% 100%;
 }
+
 
 .onboarding .navbar-header {
   margin: 0 auto;
@@ -143,4 +149,53 @@ nav form.navbar-form {
 
 nav + .container {
   margin-bottom: 1rem;
+} */
+
+#currExpensive {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#TCGCarousel {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  width: 5vw;
+  height: 5vw;
+}
+
+.carousel-inner {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cards-wrapper {
+  display: flex;
+}
+
+.card {
+  margin: 0.5em;
+  width: calc(100% / 3);
+}
+
+.card-title {
+  color: #7d78a3;
+}
+
+.card-text {
+  font-size: 0.8em;
+}
+
+.card-body {
+  line-height: 0.8em;
+}
+
+.fw-light {
+  font-size: 0.5em;
 }
