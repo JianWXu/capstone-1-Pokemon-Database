@@ -9,6 +9,7 @@ from pokemontcgsdk import Card, Set, Type, Subtype, Supertype, Rarity, RestClien
 import urllib.request
 import json
 import urllib.parse
+from sqlalchemy.exc import IntegrityError
 
 CURR_USER_KEY = "curr_user"
 
@@ -82,6 +83,37 @@ def sign_in():
     return render_template('users/login.html', form=form)
 
 
+@app.route("/signup", methods=["GET", "POST"])
+def sign_up():
+    """user sign up for new account"""
+
+    form = SignUpForm()
+
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                username=form.username.data,
+                password=form.password.data,
+                email=form.email.data,
+                country=form.country.data,
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('users/signup.html', form=form)
+
+        do_login(user)
+
+        return redirect("/")
+
+    else:
+        return render_template('users/signup.html', form=form)
+
+
+###########################################################################
+# home directory
+
 @app.route("/")
 def home_page():
     """ home directory"""
@@ -96,3 +128,18 @@ def home_page():
     exp_cards = Card.where(
         orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
     return render_template('index.html', cards=cards, exp_cards=exp_cards)
+
+
+##########################################################################
+# energy card pages
+
+
+@app.route("/colorless")
+def colorless_page():
+    """colorless page route"""
+
+    type = Type.all()[0]
+
+    cards = Card.where(
+        q=f'types:"{type}"', orderBy="-set.releaseDate", page=1, pageSize=9)
+    return render_template('energies/colorless.html', cards=cards)

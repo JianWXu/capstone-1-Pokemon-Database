@@ -13,9 +13,10 @@ class LoginForm(FlaskForm):
 class SignUpForm(FlaskForm):
     """Form for User Sign-Up"""
 
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])    
     password = PasswordField('Password', validators=[Length(min=6)])
+    email = StringField('Email', validators=[DataRequired()])
+    country = StringField('Country', validators=[DataRequired()])
 
 
 class PostForm(FlaskForm):

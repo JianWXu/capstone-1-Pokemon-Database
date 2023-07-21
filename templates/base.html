@@ -28,37 +28,28 @@
         <nav>
           <p>Search cards via energy</p>
             <ul>
-                <li><a href="">Colorless Energy</a></li>
-                <li><a href="">Darkness Energy</a></li>
-                <li><a href="">Dragon Energy</a></li>
-                <li><a href="">Fairy Energy</a></li>
-                <li><a href="">Fighting Energy</a></li>
-                <li><a href="">Fire Energy</a></li>
-                <li><a href="">Grass Energy</a></li>
-                <li><a href="">Lightning Energy</a></li>
-                <li><a href="">Metal Energy</a></li>
-                <li><a href="">Psychic Energy</a></li>
-                <li><a href="">Water Energy</a></li>
+                <li><a href="/colorless">Colorless Energy</a></li>
+                <li><a href="/darkness">Darkness Energy</a></li>
+                <li><a href="/dragon">Dragon Energy</a></li>
+                <li><a href="/fairy">Fairy Energy</a></li>
+                <li><a href="/fighting">Fighting Energy</a></li>
+                <li><a href="/fire">Fire Energy</a></li>
+                <li><a href="/grass">Grass Energy</a></li>
+                <li><a href="/lightning">Lightning Energy</a></li>
+                <li><a href="/metal">Metal Energy</a></li>
+                <li><a href="/psychic">Psychic Energy</a></li>
+                <li><a href="/water">Water Energy</a></li>
             </ul>
         </nav>
       </div>
             
 
-
-
-
             <a href="/" class="navbar-brand">
               <img src="/static/images/Component_1-1.png" alt="logo">
             </a>
-            
-            
-           
-
-          
-
+   
           <ul class="nav navbar-nav navbar-left">
-            {% if request.endpoint != None %}
-            
+            {% if request.endpoint != None %}            
             <li>
               <form class="navbar-form navbar-left" action="/">
                 <input name="q" class="form-control" placeholder="Search Cards" id="search">
@@ -93,7 +84,6 @@
         {% endblock %}
       
       </div>
-
       
       <footer>
         <hr>
@@ -104,6 +94,7 @@
 
       <script src="/static/script.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+      <script src="https://unpkg.com/htmx.org@1.9.3" integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua" crossorigin="anonymous"></script>
 
 
 </body>

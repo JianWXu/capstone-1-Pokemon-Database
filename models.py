@@ -18,6 +18,40 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
+    messages = db.relationship('Message')
+
+    @classmethod
+    def signup(cls, username, email, password, country):
+        """Sign up user.
+
+        Hashes password and adds user to system.
+        """
+
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_pwd,
+            country=country
+        )
+
+        db.session.add(user)
+        return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Find user with `username` and `password`."""
+
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+
+        return False
+
 
 class Post(db.Model):
     """Post."""
