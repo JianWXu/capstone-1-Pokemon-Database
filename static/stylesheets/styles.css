@@ -2,6 +2,9 @@
 
 body {
   background-color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 body.error-404 {
@@ -49,7 +52,7 @@ body.error-404 {
 .navbar-brand > img {
   display: inline-block;
   margin-left: 10px;
-  width: 180px;
+  height: 46px;
   border-radius: 2px;
 }
 
@@ -312,4 +315,23 @@ nav + .container {
 
 .fw-light {
   font-size: 0.5em;
+}
+
+/******************* footer ********************/
+
+footer {
+  margin-top: auto;
+  text-align: center;
+}
+
+footer hr {
+  width: 20%;
+  opacity: 20%;
+  margin: 40px auto 0;
+}
+
+footer p {
+  margin-top: 10px;
+  font-size: 0.75em;
+  opacity: 70%;
 }
