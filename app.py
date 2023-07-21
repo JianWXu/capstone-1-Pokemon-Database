@@ -35,6 +35,7 @@ connect_db(app)
 
 
 @app.route("/")
+    # home directory
 def home_page():
     # cards = Card.where(q='set.name:generations supertype:pokemon')
     set = Set.where(orderBy="releaseDate")
@@ -47,3 +48,9 @@ def home_page():
     exp_cards = Card.where(
         orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
     return render_template('index.html', cards=cards, exp_cards=exp_cards)
+
+
+# @app.route("/sign-in")
+# def sign_in():
+#     # user sign in form
+    

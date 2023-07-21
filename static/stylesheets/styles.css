@@ -41,15 +41,15 @@ body.error-404 {
   color: #fff;
 }
 
-/* .navbar-brand {
+.navbar-brand {
   display: flex;
   align-items: center;
-} */
+}
 
 .navbar-brand > img {
   display: inline-block;
   margin-left: 10px;
-  width: 100px;
+  width: 180px;
   border-radius: 2px;
 }
 
@@ -58,14 +58,15 @@ body.error-404 {
   border-radius: 32px;
 }
 
-/* ul.nav.navbar-nav {
+ul.nav.navbar-nav {
   align-items: center;
+  margin-right: 15%;
 }
 
 ul.nav.navbar-nav li {
   margin: 0 0.5rem;
   display: flex;
-} */
+}
 
 nav form.navbar-form {
   display: flex;
@@ -73,7 +74,7 @@ nav form.navbar-form {
 }
 
 #search.form-control {
-  /* border-radius: 20px; */
+  border-radius: 20px;
   margin-bottom: 0;
   width: 100%;
   font-size: 13px;
@@ -107,6 +108,10 @@ h1 {
   font-size: 1.1em;
 }
 
+#firsth1 {
+  margin-top: 15px;
+}
+
 /****************** hamburger menu  *************/
 
 * {
@@ -130,20 +135,34 @@ button {
 .navigation {
   position: fixed;
   right: -500px;
-  width: 350px;
+  top: 6.3%;
+  width: 15%;
   height: 100%;
-  background-color: white;
+  background-color: #dfe5f2;
   transition: 0.5s;
+  text-align: center;
+  opacity: 70%;
+}
+
+.navigation p {
+  margin-top: 15px;
+  margin-bottom: 0;
+  color: #7d78a3;
 }
 
 .navigation ul li {
-  color: black;
-  text-align: right;
-  text-transform: uppercase;
+  text-align: center;
   list-style-type: none;
-  font-size: 1.5em;
-  padding: 20px 30px;
-  border-bottom: 1pt solid #252525;
+
+  padding: 10px 20px;
+}
+
+.navigation ul li a {
+  text-decoration: none;
+  /* font-size: 1.2em; */
+  border-bottom: solid black 0.5px;
+  padding-bottom: 5px;
+  color: #336e8c;
 }
 
 .hamburger,
@@ -153,7 +172,7 @@ button {
 
 .hamburger {
   display: block;
-  top: 5%;
+  top: 3%;
   left: 95%;
   width: 30px;
   height: 30px;
@@ -163,6 +182,7 @@ button {
 }
 
 .bar {
+  opacity: 70%;
   top: 3px;
   background: #000;
   width: 100%;
@@ -183,6 +203,7 @@ button {
 }
 
 .hamburger.open #bar1 {
+  opacity: 70%;
   background-color: black;
   transform: rotate(45deg) translate(6px, 5px);
 }
@@ -193,6 +214,7 @@ button {
 
 .hamburger.open #bar3 {
   background-color: black;
+  opacity: 70%;
   transform: rotate(-45deg) translate(6px, -5px);
 }
 
