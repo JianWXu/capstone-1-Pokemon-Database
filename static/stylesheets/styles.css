@@ -1,4 +1,4 @@
-/* ====================== General */
+/********** General **************/
 
 body {
   background-color: #fff;
@@ -20,12 +20,13 @@ body.error-404 {
   cursor: pointer;
 }
 
-/* ---------Nav Bar------- */
+/*************** Nav Bar ***************/
+
 .navbar {
   background-color: RGB(125, 120, 163);
   height: 46px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   position: relative;
   z-index: 9999;
 }
@@ -40,10 +41,10 @@ body.error-404 {
   color: #fff;
 }
 
-.navbar-brand {
+/* .navbar-brand {
   display: flex;
   align-items: center;
-}
+} */
 
 .navbar-brand > img {
   display: inline-block;
@@ -57,14 +58,14 @@ body.error-404 {
   border-radius: 32px;
 }
 
-ul.nav.navbar-nav {
+/* ul.nav.navbar-nav {
   align-items: center;
 }
 
 ul.nav.navbar-nav li {
   margin: 0 0.5rem;
   display: flex;
-}
+} */
 
 nav form.navbar-form {
   display: flex;
@@ -104,6 +105,95 @@ nav form.navbar-form {
 h1 {
   color: #a29cbb;
   font-size: 1.1em;
+}
+
+/****************** hamburger menu  *************/
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+/* #hamburger-nav {
+  position: relative;
+  top: 100px;
+  right: 50px;
+  width: 250px;
+} */
+
+.navigation {
+  position: fixed;
+  right: -500px;
+  width: 350px;
+  height: 100%;
+  background-color: white;
+  transition: 0.5s;
+}
+
+.navigation ul li {
+  color: black;
+  text-align: right;
+  text-transform: uppercase;
+  list-style-type: none;
+  font-size: 1.5em;
+  padding: 20px 30px;
+  border-bottom: 1pt solid #252525;
+}
+
+.hamburger,
+.bar {
+  position: fixed;
+}
+
+.hamburger {
+  display: block;
+  top: 5%;
+  left: 95%;
+  width: 30px;
+  height: 30px;
+  transform: translateY(-50%);
+  border: 0;
+  background: 0 0;
+}
+
+.bar {
+  top: 3px;
+  background: #000;
+  width: 100%;
+  height: 4px;
+  transition: all 0.3s ease-in;
+}
+
+#bar2 {
+  top: 11px;
+}
+
+#bar3 {
+  top: 19px;
+}
+
+.navigation.active {
+  right: 0;
+}
+
+.hamburger.open #bar1 {
+  background-color: black;
+  transform: rotate(45deg) translate(6px, 5px);
+}
+
+.hamburger.open #bar2 {
+  background-color: transparent;
+}
+
+.hamburger.open #bar3 {
+  background-color: black;
+  transform: rotate(-45deg) translate(6px, -5px);
 }
 
 /* .onboarding > .navbar {
@@ -151,14 +241,16 @@ nav + .container {
   margin-bottom: 1rem;
 } */
 
+/*************** Carousel CSS **************/
+
 #currExpensive {
-  width: 80%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
 
 #TCGCarousel {
-  width: 80%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
