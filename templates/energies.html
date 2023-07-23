@@ -11,7 +11,7 @@
         {% for card in cards %}
         
             <div class="col-4">
-                <a href="/{{card.id}}"><img src="{{card.images.small}}" class="card-img-top" id="engy-cards" alt="{{energy}}-card"></a>
+                <a href="/cards/{{card.id}}"><img src="{{card.images.small}}" class="card-img-top" id="engy-cards" alt="{{energy}}-card"></a>
                 <div class="card-body">
                   <h5 class="card-title">{{card.name}}</h5>
                   <p class="card-text" id="engy-text">{{card.set.name}}

@@ -374,3 +374,20 @@ footer p {
 #each-card span {
   font-weight: lighter;
 }
+
+/******************** user profile *************************/
+
+#owned-cara {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border: black solid 1px;
+}
+
+#owned-cara-inner {
+  width: 30%;
+}
+
+#owned-cara-inner carousel-item{
+  width: 25%;
+}

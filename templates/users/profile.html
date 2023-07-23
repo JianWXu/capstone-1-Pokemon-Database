@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div id="profile-container-div">
+    <h1>My Account Summary</h1>
+    <div id="welcome-div">
+        <h2 id="welcome-h2">Welcome, {{user.username}}</h2>
+        <p id="welcome-para">This is your account summary. You can change your personal information.</p>
+        <div id="personal-info-div">
+            <h3 id="personal-info">Personal Information</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>User Name</td>
+                        <td>{{user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{user.email}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="#">Edit</a>
+        </div>
+    </div>
+    <h2 id="owned-h2">Cards Owned</h2>
+    
+        <div id="owned-cara" class="carousel carousel-dark slide">
+            <div class="carousel-inner" id="owned-cara-inner">
+         
+
+              {% for card in card_api_list %}
+                    {% if loop.first %}
+                    <div class="carousel-item active">
+                    <div class="cards-wrapper">
+                    
+                    {% endif %}
+                    
+                    {% if loop.index < 3 %}
+                    <div class="cara-card"><a href="/cards/{{card.id}}"><img
+                        src="{{card.images.small}}"
+                        class="card-img-top"
+                        alt="{{card.name}}"
+                      /></a>
+                  </div>
+                    {% endif %}
+                        
+                      
+                    {% if loop.index == 3 %}
+                    </div>
+                    </div>
+                    {% endif %}
+
+
+
+
+                    {% if loop.index is divisibleby(3) and loop.index > 2 %}
+                        <div class="carousel-item">
+                        <div class="cards-wrapper"> 
+                    {% endif %}       
+                    
+                    {% if loop.index > 3 %}
+                        <div class="cara-card"><a href="/cards/{{card.id}}"><img
+                                src="{{card.images.small}}"
+                                class="card-img-top"
+                                alt="{{card.name}}"
+                            /></a>
+                            </div>
+                            {% endif %}
+                            
+                    {% if loop.index is divisibleby(3) and loop.index > 2 %}    
+                        </div>
+                        </div>
+                    {% endif %}
+
+               
+            {% endfor %}
+
+
+
+
+
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#owned-cara" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#owned-cara" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+    
+    
+</div>
+
+
+
+{% endblock %}

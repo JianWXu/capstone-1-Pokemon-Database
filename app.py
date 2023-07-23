@@ -118,7 +118,7 @@ def sign_up():
 def home_page():
     # cards = Card.where(q='set.name:generations supertype:pokemon')
     set = Set.where(orderBy="releaseDate")
-
+    user = g.user
     new_set = set[::-1]
     newest_series = new_set[0].series
     cards = Card.where(
@@ -128,7 +128,7 @@ def home_page():
 
     exp_cards = Card.where(
         orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
-    return render_template('index.html', cards=cards, exp_cards=exp_cards, energies=energies)
+    return render_template('index.html', cards=cards, exp_cards=exp_cards, energies=energies, user=user)
 
 
 ##########################################################################
@@ -137,12 +137,12 @@ def home_page():
 
 @app.route("/<energy>")
 def colorless_page(energy):
-
+    user = g.user
     energies = Type.all()
 
     cards = Card.where(
         q=f'types:"{energy}"', orderBy="-set.releaseDate", page=1, pageSize=9)
-    return render_template('energies.html', energy=energy, energies=energies, cards=cards)
+    return render_template('energies.html', energy=energy, energies=energies, cards=cards, user=user)
 
 
 #######################################################################
@@ -150,7 +150,8 @@ def colorless_page(energy):
 
 @app.route("/cards/<card_id>")
 def each_card(card_id):
-    # user = g.user
+
+    user = g.user
     energies = Type.all()
 
     card = Card.find(card_id)
@@ -159,7 +160,7 @@ def each_card(card_id):
 
     card_wanted_list = [c.card_id for c in g.user.card_wanted]
 
-    return render_template('each_card.html', card=card, energies=energies, card_owned_list=card_owned_list, card_wanted_list=card_wanted_list)
+    return render_template('each_card.html', card=card, energies=energies, card_owned_list=card_owned_list, card_wanted_list=card_wanted_list, user=user)
 
 
 ######################################################################
@@ -245,3 +246,27 @@ def delete_wantedCard(card_id):
     db.session.delete(wantedCard_id)
     db.session.commit()
     return redirect(f"/cards/{card_id}")
+
+
+######################################################################
+# user profile
+
+@app.route("/user/<user_id>")
+def user_profile(user_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/login")
+
+    user = g.user
+    user_id = user.id
+    card_api_list = []
+
+    owned_cards = UserCard.query.filter_by(user_id=user_id).all()
+    for card in owned_cards:
+        card_api_list.append(Card.find(card.card_id))
+        
+
+ 
+
+    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list)
