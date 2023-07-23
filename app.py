@@ -116,7 +116,6 @@ def sign_up():
 
 @app.route("/")
 def home_page():
-    """ home directory"""
     # cards = Card.where(q='set.name:generations supertype:pokemon')
     set = Set.where(orderBy="releaseDate")
 
@@ -125,21 +124,124 @@ def home_page():
     cards = Card.where(
         q=f'set.series:"{newest_series}"', orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
 
+    energies = Type.all()
+
     exp_cards = Card.where(
         orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
-    return render_template('index.html', cards=cards, exp_cards=exp_cards)
+    return render_template('index.html', cards=cards, exp_cards=exp_cards, energies=energies)
 
 
 ##########################################################################
 # energy card pages
 
 
-@app.route("/colorless")
-def colorless_page():
-    """colorless page route"""
+@app.route("/<energy>")
+def colorless_page(energy):
 
-    type = Type.all()[0]
+    energies = Type.all()
 
     cards = Card.where(
-        q=f'types:"{type}"', orderBy="-set.releaseDate", page=1, pageSize=9)
-    return render_template('energies/colorless.html', cards=cards)
+        q=f'types:"{energy}"', orderBy="-set.releaseDate", page=1, pageSize=9)
+    return render_template('energies.html', energy=energy, energies=energies, cards=cards)
+
+
+#######################################################################
+# each card pages
+
+@app.route("/cards/<card_id>")
+def each_card(card_id):
+    # user = g.user
+    energies = Type.all()
+
+    card = Card.find(card_id)
+
+    card_owned_list = [c.card_id for c in g.user.card_owned]
+
+    card_wanted_list = [c.card_id for c in g.user.card_wanted]
+
+    return render_template('each_card.html', card=card, energies=energies, card_owned_list=card_owned_list, card_wanted_list=card_wanted_list)
+
+
+######################################################################
+# add card to user wanted model
+
+@app.route("/user/cards/wanted/<card_id>", methods=["POST"])
+def want_card(card_id):
+
+    user_id = g.user.id
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get(user_id)
+
+    new_wanted = WantCard(
+        card_id=card_id,
+        user_id=user_id
+    )
+    db.session.add(new_wanted)
+    db.session.commit()
+
+    return redirect(f"/cards/{card_id}")
+
+######################################################################
+# add card to user owned model
+
+
+@app.route("/user/cards/owned/<card_id>", methods=["POST"])
+def owned_card(card_id):
+
+    user_id = g.user.id
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get(user_id)
+
+    new_owned = UserCard(
+        card_id=card_id,
+        user_id=user_id
+    )
+    db.session.add(new_owned)
+    db.session.commit()
+
+    return redirect(f"/cards/{card_id}")
+
+
+######################################################################
+# delete card from user owned model
+
+@app.route("/user/cards/owned/<card_id>/delete", methods=["POST"])
+def delete_ownedCard(card_id):
+
+    user_id = g.user.id
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    ownedCard_id = UserCard.query.filter_by(
+        card_id=card_id, user_id=user_id).first()
+
+    db.session.delete(ownedCard_id)
+    db.session.commit()
+    return redirect(f"/cards/{card_id}")
+
+
+######################################################################
+# delete card from user wanted model
+
+@app.route("/user/cards/wanted/<card_id>/delete", methods=["POST"])
+def delete_wantedCard(card_id):
+
+    user_id = g.user.id
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    wantedCard_id = WantCard.query.filter_by(
+        card_id=card_id, user_id=user_id).first()
+    db.session.delete(wantedCard_id)
+    db.session.commit()
+    return redirect(f"/cards/{card_id}")

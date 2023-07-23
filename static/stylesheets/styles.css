@@ -29,7 +29,7 @@ body.error-404 {
 
 .navbar {
   background-color: RGB(125, 120, 163);
-  height: 46px;
+  height: 70px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   /* margin-bottom: 1rem; */
   position: relative;
@@ -129,7 +129,7 @@ button {
   height: 100%;
   background-color: #dfe5f2;
   transition: 0.5s;
-  text-align: center;
+  text-align: left;
   opacity: 70%;
 }
 
@@ -138,10 +138,11 @@ button {
   margin-bottom: 0;
   color: #7d78a3;
   font-size: 1.4em;
+  padding-left: 52px;
 }
 
 .navigation ul li {
-  text-align: center;
+  text-align: left;
   list-style-type: none;
 
   padding: 10px 20px;
@@ -363,4 +364,13 @@ footer p {
 
 #engy-text {
   padding-bottom: 50px;
+}
+
+/******************** each card pages *************************/
+
+#each-card p {
+  font-size: 1.2em;
+}
+#each-card span {
+  font-weight: lighter;
 }

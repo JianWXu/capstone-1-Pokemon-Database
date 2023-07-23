@@ -16,7 +16,7 @@ class SignUpForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])    
     password = PasswordField('Password', validators=[Length(min=6)])
     email = StringField('Email', validators=[DataRequired()])
-    country = StringField('Country', validators=[DataRequired()])
+    country = StringField('Country')
 
 
 class PostForm(FlaskForm):

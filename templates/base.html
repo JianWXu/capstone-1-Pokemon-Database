@@ -28,18 +28,11 @@
         <nav>
           <p>Search cards via energy</p>
             <ul>
-                <li><a href="/colorless">Colorless Energy</a></li>
-                <li><a href="/darkness">Darkness Energy</a></li>
-                <li><a href="/dragon">Dragon Energy</a></li>
-                <li><a href="/fairy">Fairy Energy</a></li>
-                <li><a href="/fighting">Fighting Energy</a></li>
-                <li><a href="/fire">Fire Energy</a></li>
-                <li><a href="/grass">Grass Energy</a></li>
-                <li><a href="/lightning">Lightning Energy</a></li>
-                <li><a href="/metal">Metal Energy</a></li>
-                <li><a href="/psychic">Psychic Energy</a></li>
-                <li><a href="/water">Water Energy</a></li>
+              {% for energy in energies %}
+                <li><a href="/{{energy}}">{{energy}} Energy</a></li>
+              {% endfor %}
             </ul>
+            
         </nav>
       </div>
             
@@ -68,7 +61,7 @@
                 <i class="fa-solid fa-user"></i>
               </a>
             </li>
-            <li><a href="/">Postings</a></li>
+            <li><a href="/">My Posts</a></li>
             <li><a href="/logout">Log out</a></li>
             {% endif %}
           </ul>

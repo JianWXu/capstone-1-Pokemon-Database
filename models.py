@@ -18,7 +18,12 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
-    messages = db.relationship('Message')
+    posts = db.relationship('Post', backref="user_post")
+
+    card_wanted = db.relationship(
+        'WantCard', backref="user_want", lazy='dynamic')
+    card_owned = db.relationship(
+        'UserCard', backref="user_owned", lazy='dynamic')
 
     @classmethod
     def signup(cls, username, email, password, country):
@@ -68,8 +73,6 @@ class Post(db.Model):
         'users.id', ondelete='CASCADE'))
     card_id = db.Column(db.Text, nullable=False)
 
-    user = db.relationship("User")
-
 
 class UserCard(db.Model):
     """Cards owned by user"""
@@ -80,6 +83,8 @@ class UserCard(db.Model):
     card_id = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.id', ondelete='CASCADE'), nullable=False)
+
+    # user = db.relationship("User")
 
 
 class WantCard(db.Model):
