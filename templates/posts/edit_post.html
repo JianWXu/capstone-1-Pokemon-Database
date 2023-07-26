@@ -3,9 +3,10 @@
 
 {% block content %}
 
-  <div class="row justify-content-md-center" id="login-div">
+
+<div class="row justify-content-md-center" id="login-div">
     <div class="col-md-7 col-lg-5">
-      <h2>Login</h2>
+      <h2>Edit This Post</h2>
 
       <form method="POST" id="user_form">
         {{ form.hidden_tag() }}
@@ -17,9 +18,16 @@
           {{ field(placeholder=field.label.text, class="form-control") }}
         {% endfor %}
 
-        <button class="btn btn-primary btn-block btn-lg">Log in</button>
+       
+        <a href="/posts/edit/{{post.id}}" class="btn btn-primary btn-block">Edit Post</a>
+        
+       
+        
       </form>
+      <form method="POST" action="/posts/delete/{{post.id}}">
+        <button class="btn btn-outline-danger">Delete Post</button>
+   </form>
     </div>
   </div>
 
-  {% endblock %}
+{% endblock %}

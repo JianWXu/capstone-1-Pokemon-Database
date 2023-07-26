@@ -209,76 +209,34 @@ button {
   transform: rotate(-45deg) translate(6px, -5px);
 }
 
-/* .onboarding > .navbar {
-  background-image: url("/static/images/nav-bg.png");
-  background-size: 100% 100%;
-}
-
-
-.onboarding .navbar-header {
-  margin: 0 auto;
-}
-
-.onboarding .navbar-brand {
-  margin: 0;
-}
-
-.onboarding .navbar-brand span {
-  display: none;
-}
-
-.onboarding .nav.navbar-nav.navbar-right {
-  position: absolute;
-  right: 16px;
-}
-
-.onboarding > .navbar a {
-  color: #fff;
-}
-
-.onboarding > .navbar form.navbar-form {
-  display: none;
-}
-
-.onboarding {
-  background-color: #fff;
-}
-
-@media (max-width: 468px) {
-  nav form.navbar-form {
-    display: none;
-  }
-}
-
-nav + .container {
-  margin-bottom: 1rem;
-} */
-
 /**************************** INDEX ***************************/
 
 /**************** general ******************/
 
-h1 {
+#firsth1 {
+  margin: 35px auto 20px auto;
   color: #a29cbb;
-  font-size: 1.5em;
+  font-size: 1.75em;
   font-weight: bolder;
-  margin-bottom: 20px;
 }
 
-#firsth1 {
-  margin-top: 35px;
+#secondh1 {
+  margin: 10px auto 20px auto;
+  color: #a29cbb;
+  font-size: 1.75em;
+  font-weight: bolder;
 }
 
 /*************** Carousel **************/
 
 #currExpensive {
-  width: 100%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
 
 #TCGCarousel {
-  width: 100%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -377,10 +335,79 @@ footer p {
 
 /******************** user profile *************************/
 
-#owned-cara {
+#profile-container-div {
   width: 80%;
   margin: auto;
-  border: black solid 1px;
+}
+
+#prof-h1 {
+  margin-top: 40px;
+  font-size: 1.5rem;
+  background-color: #d9d9d6;
+  display: block;
+  border-top: black solid 1px;
+  padding: 5px;
+}
+
+#welcome-div {
+  border-right: #d9d9d6 solid 1px;
+  border-bottom: #d9d9d6 solid 1px;
+  border-left: #d9d9d6 solid 1px;
+}
+
+#welcome-h2 {
+  font-size: 1rem;
+  padding: 5px;
+}
+
+#welcome-para {
+  font-size: 1rem;
+  padding: 5px;
+}
+
+#personal-info-div {
+  width: 80%;
+  margin: auto auto 25px auto;
+  border: #d9d9d6 solid 1px;
+}
+
+#personal-info {
+  font-size: 1.2rem;
+  font-weight: lighter;
+  background-color: #d9d9d6;
+  display: block;
+  padding: 10px;
+}
+
+#prof-table,
+td {
+  outline: #d9d9d6 solid 1px;
+  width: 90%;
+  margin: 10px auto 10px auto;
+}
+
+.f-column {
+  background: #f6f6f1;
+  width: 25%;
+}
+
+#personal-info-div a {
+  margin: auto auto 50px 5%;
+}
+
+#prof-h2 {
+  font-size: 1.2rem;
+  font-weight: lighter;
+  background-color: #d9d9d6;
+  display: block;
+  padding: 10px;
+  margin: auto 10%;
+}
+
+#owned-cara {
+  width: 80%;
+  margin: auto auto 20px auto;
+  border: #d9d9d6 solid 1px;
   text-align: end;
 }
 
@@ -392,16 +419,10 @@ footer p {
   width: calc(100% / 3);
 }
 
-#owned-cara a {
-  font-size: 0.8em;
-  margin: auto 5px;
-}
-
 #wanted-cara {
   width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  border: black solid 1px;
+  margin: auto auto 20px auto;
+  border: #d9d9d6 solid 1px;
   text-align: end;
 }
 
@@ -413,7 +434,46 @@ footer p {
   width: calc(100% / 3);
 }
 
-#wanted-cara a{
-  font-size: 0.8em;
-  margin-bottom: auto 5px;
+#all-cards {
+  margin: auto 10% auto auto;
+}
+
+#posts-made {
+  font-size: 1.2rem;
+  font-weight: lighter;
+  background-color: #d9d9d6;
+  display: block;
+  padding: 10px;
+  margin: auto 10%;
+}
+
+#prof-posts-div {
+  border: #d9d9d6 solid 1px;
+  width: 80%;
+  margin: auto;
+}
+
+#post-title-li {
+  width: 80%;
+  margin: 5px auto;
+  display: block;
+  font-size: 1.1rem;
+}
+
+#post-title-li:nth-child(even) {
+  background: #f6f6f1;
+}
+
+/******************** Make New Post *************************/
+
+#post-div h2 {
+  margin: 25px auto 30px;
+}
+
+#post-div #title {
+  height: 1.2em;
+}
+
+#post-div #post {
+  height: 6rem;
 }

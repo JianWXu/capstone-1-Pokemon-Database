@@ -4,119 +4,131 @@
 {% block content %}
 
 <div id="profile-container-div">
-    <h1>My Account Summary</h1>
+    <h1 id="prof-h1">My Account Summary</h1>
     <div id="welcome-div">
         <h2 id="welcome-h2">Welcome, {{user.username}}</h2>
         <p id="welcome-para">This is your account summary. You can change your personal information.</p>
         <div id="personal-info-div">
             <h3 id="personal-info">Personal Information</h3>
-            <table class="table">
+            <table class="table" id="prof-table">
                 <tbody>
                     <tr>
-                        <td>User Name</td>
+                        <td class="f-column">User Name</td>
                         <td>{{user.username}}</td>
                     </tr>
                     <tr>
-                        <td>Email</td>
+                        <td class="f-column">Email</td>
                         <td>{{user.email}}</td>
                     </tr>
                 </tbody>
             </table>
             <a href="#">Edit</a>
         </div>
+
+        <h2 id="prof-h2">Cards Owned</h2>
+    
+        <div id="owned-cara" class="carousel carousel-dark slide" style="height: {{ '15rem' if card_api_list|length == 0 else '' }};">
+            <a href="/" id="all-cards">All cards owned</a>
+            <div class="carousel-inner" id="owned-cara-inner">
+                {% for card in card_api_list %}
+                    {% if loop.first %}
+                        <div class="carousel-item active">
+                            <div class="cards-wrapper">
+                    {% elif loop.index % 3 == 1 %}
+                        <div class="carousel-item">
+                            <div class="cards-wrapper">
+                    {% endif %}
+        
+                    <div class="cara-card">
+                        <a href="/cards/{{ card.id }}">
+                            <img src="{{ card.images.small }}" class="card-img-top" alt="{{ card.name }}" />
+                        </a>
+                    </div>
+        
+                    {% if loop.index % 3 == 0 or loop.last %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% if card_api_list|length > 0 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#owned-cara" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#owned-cara" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            {% endif %}
+    
+        </div> 
+        
+    
+        
+        <h2 id="prof-h2">Cards Wanted</h2>
+        
+        <div id="wanted-cara" class="carousel carousel-dark slide" style="height: {{ '15rem' if want_api_list|length == 0 else '' }};">
+            <a href="/" id="all-cards">All cards wanted</a>
+            <div class="carousel-inner" id="wanted-cara-inner">
+                {% for card in want_api_list %}
+                    {% if loop.first %}
+                        <div class="carousel-item active">
+                            <div class="cards-wrapper">
+                    {% elif loop.index % 3 == 1 %}
+                        <div class="carousel-item">
+                            <div class="cards-wrapper">
+                    {% endif %}
+        
+                    <div class="cara-card">
+                        <a href="/cards/{{ card.id }}">
+                            <img src="{{ card.images.small }}" class="card-img-top" alt="{{ card.name }}" />
+                        </a>
+                    </div>
+        
+                    {% if loop.index % 3 == 0 or loop.last %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% if want_api_list|length > 0 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#wanted-cara" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#wanted-cara" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            {% endif %}
+            
+            
+            
+        </div>   
+        
+        
+        <h2 id="posts-made">Posts</h2>
+        <div id="prof-posts-div">
+            <ul>
+                {% for post in self_posts %}
+                <a href="/posts/edit/{{post.id}}"><li id="post-title-li">{{post.title}}</li></a>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+    
+    </div>
+    
+    
     </div>
 
 
 
-    <h2 id="owned-h2">Cards Owned</h2>
-    
-    <div id="owned-cara" class="carousel carousel-dark slide" style="height: {{ '15rem' if card_api_list|length == 0 else '' }};">
-        <a href="/">All cards owned</a>
-        <div class="carousel-inner" id="owned-cara-inner">
-            {% for card in card_api_list %}
-                {% if loop.first %}
-                    <div class="carousel-item active">
-                        <div class="cards-wrapper">
-                {% elif loop.index % 3 == 1 %}
-                    <div class="carousel-item">
-                        <div class="cards-wrapper">
-                {% endif %}
-    
-                <div class="cara-card">
-                    <a href="/cards/{{ card.id }}">
-                        <img src="{{ card.images.small }}" class="card-img-top" alt="{{ card.name }}" />
-                    </a>
-                </div>
-    
-                {% if loop.index % 3 == 0 or loop.last %}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        
-        {% if card_api_list|length > 0 %}
-        <button class="carousel-control-prev" type="button" data-bs-target="#owned-cara" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#owned-cara" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        {% endif %}
-
-    </div> 
-    
-
-    
-    <h2 id="owned-h2">Cards Wanted</h2>
-    
-    <div id="wanted-cara" class="carousel carousel-dark slide" style="height: {{ '15rem' if want_api_list|length == 0 else '' }};">
-        <a href="/">All cards wanted</a>
-        <div class="carousel-inner" id="wanted-cara-inner">
-            {% for card in want_api_list %}
-                {% if loop.first %}
-                    <div class="carousel-item active">
-                        <div class="cards-wrapper">
-                {% elif loop.index % 3 == 1 %}
-                    <div class="carousel-item">
-                        <div class="cards-wrapper">
-                {% endif %}
-    
-                <div class="cara-card">
-                    <a href="/cards/{{ card.id }}">
-                        <img src="{{ card.images.small }}" class="card-img-top" alt="{{ card.name }}" />
-                    </a>
-                </div>
-    
-                {% if loop.index % 3 == 0 or loop.last %}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        
-        {% if want_api_list|length > 0 %}
-        <button class="carousel-control-prev" type="button" data-bs-target="#wanted-cara" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#wanted-cara" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        {% endif %}
-        
-        
-        
-    </div>   
-    
-
-
-
-</div>
-
+   
 
 
 

@@ -61,7 +61,7 @@ class User(db.Model):
 class Post(db.Model):
     """Post."""
 
-    __tablename_ = "posts"
+    __tablename_ = "post"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.Text, nullable=False)
@@ -71,7 +71,7 @@ class Post(db.Model):
     country = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.id', ondelete='CASCADE'))
-    card_id = db.Column(db.Text, nullable=False)
+    # card_id = db.Column(db.Text, nullable=False)
 
 
 class UserCard(db.Model):

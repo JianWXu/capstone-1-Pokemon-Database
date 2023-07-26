@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from dotenv import load_dotenv
 from models import db, connect_db, User, Post, UserCard, WantCard
-from forms import LoginForm, SignUpForm, PostForm
+from forms import LoginForm, SignUpForm, PostForm, EditPost
 from pokemontcgsdk import Card, Set, Type, Subtype, Supertype, Rarity, RestClient
 import urllib.request
 import json
@@ -111,7 +111,7 @@ def sign_up():
         return render_template('users/signup.html', form=form)
 
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout")
 def log_out():
 
     do_logout()
@@ -156,7 +156,7 @@ def colorless_page(energy):
 #######################################################################
 # each card pages
 
-@app.route("/cards/<card_id>")
+@app.route("/cards/<int:card_id>")
 def each_card(card_id):
 
     user = g.user
@@ -174,7 +174,7 @@ def each_card(card_id):
 ######################################################################
 # add card to user wanted model
 
-@app.route("/user/cards/wanted/<card_id>", methods=["POST"])
+@app.route("/user/cards/wanted/<int:card_id>", methods=["POST"])
 def want_card(card_id):
 
     user_id = g.user.id
@@ -197,7 +197,7 @@ def want_card(card_id):
 # add card to user owned model
 
 
-@app.route("/user/cards/owned/<card_id>", methods=["POST"])
+@app.route("/user/cards/owned/<int:card_id>", methods=["POST"])
 def owned_card(card_id):
 
     user_id = g.user.id
@@ -220,7 +220,7 @@ def owned_card(card_id):
 ######################################################################
 # delete card from user owned model
 
-@app.route("/user/cards/owned/<card_id>/delete", methods=["POST"])
+@app.route("/user/cards/owned/<int:card_id>/delete", methods=["POST"])
 def delete_ownedCard(card_id):
 
     user_id = g.user.id
@@ -240,7 +240,7 @@ def delete_ownedCard(card_id):
 ######################################################################
 # delete card from user wanted model
 
-@app.route("/user/cards/wanted/<card_id>/delete", methods=["POST"])
+@app.route("/user/cards/wanted/<int:card_id>/delete", methods=["POST"])
 def delete_wantedCard(card_id):
 
     user_id = g.user.id
@@ -259,7 +259,7 @@ def delete_wantedCard(card_id):
 ######################################################################
 # user profile
 
-@app.route("/user/<user_id>")
+@app.route("/user/<int:user_id>")
 def user_profile(user_id):
 
     if not g.user:
@@ -268,6 +268,8 @@ def user_profile(user_id):
 
     user = g.user
     user_id = user.id
+    energies = Type.all()
+
     card_api_list = []
 
     owned_cards = UserCard.query.filter_by(user_id=user_id).all()
@@ -280,7 +282,9 @@ def user_profile(user_id):
     for card in wanted_cards:
         want_api_list.append(Card.find(card.card_id))
 
-    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list, want_api_list=want_api_list)
+    self_posts = Post.query.filter_by(user_id=user_id).all()
+
+    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list, want_api_list=want_api_list, self_posts=self_posts, energies=energies)
 
 
 ######################################################################
@@ -289,8 +293,69 @@ def user_profile(user_id):
 @app.route("/posts/new", methods=["GET", "POST"])
 def new_post():
 
+    user = g.user
+    energies = Type.all()
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/login")
 
-    
+    user_id = g.user.id
+
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data,
+                    user_id=user_id, country=form.country.data)
+        db.session.add(post)
+        db.session.commit()
+
+        return redirect(f"/user/{g.user.id}")
+
+    return render_template('posts/new_post.html', user=user, form=form, energies=energies)
+
+
+######################################################################
+# editing a post
+
+@app.route("/posts/edit/<int:post_id>", methods=["GET", "POST"])
+def edit_post(post_id):
+
+    user = g.user
+    energies = Type.all()
+    post = Post.query.get(post_id)
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/login")
+
+    user_id = g.user.id
+
+    form = EditPost()
+
+    if form.validate_on_submit():
+        post = Post.query.get(post_id)
+        post = Post(title=form.title.data, content=form.content.data,
+                    user_id=user_id, country=form.country.data)
+        db.session.update(post)
+        db.session.commit()
+        return redirect(f'/user/{user_id}')
+    return render_template('posts/edit_post.html', user=user, form=form, energies=energies, post=post)
+
+
+######################################################################
+# deleting a post
+
+@app.route('/posts/delete/<int:post_id>', methods=["POST"])
+def messages_destroy(post_id):
+    """Delete a message."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    post = Post.query.get(post_id)
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(f"/user/{g.user.id}")
