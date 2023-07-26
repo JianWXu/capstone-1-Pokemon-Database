@@ -378,16 +378,42 @@ footer p {
 /******************** user profile *************************/
 
 #owned-cara {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 80%;
+  margin: auto;
   border: black solid 1px;
+  text-align: end;
 }
 
 #owned-cara-inner {
-  width: 30%;
+  width: calc(100% / 3);
 }
 
-#owned-cara-inner carousel-item{
-  width: 25%;
+#owned-cara-inner carousel-item {
+  width: calc(100% / 3);
+}
+
+#owned-cara a {
+  font-size: 0.8em;
+  margin: auto 5px;
+}
+
+#wanted-cara {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border: black solid 1px;
+  text-align: end;
+}
+
+#wanted-cara-inner {
+  width: calc(100% / 3);
+}
+
+#wanted-cara-inner carousel-item {
+  width: calc(100% / 3);
+}
+
+#wanted-cara a{
+  font-size: 0.8em;
+  margin-bottom: auto 5px;
 }

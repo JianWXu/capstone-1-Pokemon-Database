@@ -111,6 +111,14 @@ def sign_up():
         return render_template('users/signup.html', form=form)
 
 
+@app.route("/logout", methods=["POST"])
+def log_out():
+
+    do_logout()
+    flash("Logged out", category="success")
+    return redirect("/login")
+
+
 ###########################################################################
 # home directory
 
@@ -265,8 +273,24 @@ def user_profile(user_id):
     owned_cards = UserCard.query.filter_by(user_id=user_id).all()
     for card in owned_cards:
         card_api_list.append(Card.find(card.card_id))
-        
 
- 
+    want_api_list = []
 
-    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list)
+    wanted_cards = WantCard.query.filter_by(user_id=user_id).all()
+    for card in wanted_cards:
+        want_api_list.append(Card.find(card.card_id))
+
+    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list, want_api_list=want_api_list)
+
+
+######################################################################
+# making a post
+
+@app.route("/posts/new", methods=["GET", "POST"])
+def new_post():
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/login")
+
+    
