@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from dotenv import load_dotenv
 from models import db, connect_db, User, Post, UserCard, WantCard
-from forms import LoginForm, SignUpForm, PostForm, EditPost
+from forms import LoginForm, SignUpForm, PostForm, EditPost, SearchPokemon
 from pokemontcgsdk import Card, Set, Type, Subtype, Supertype, Rarity, RestClient
 import urllib.request
 import json
@@ -68,6 +68,7 @@ def sign_in():
     """user sign in form"""
 
     form = LoginForm()
+    searchForm = SearchPokemon()
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
@@ -80,7 +81,7 @@ def sign_in():
 
         flash("Invalid credentials.", 'danger')
 
-    return render_template('users/login.html', form=form)
+    return render_template('users/login.html', form=form, searchForm=searchForm)
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -88,6 +89,7 @@ def sign_up():
     """user sign up for new account"""
 
     form = SignUpForm()
+    searchForm = SearchPokemon()
 
     if form.validate_on_submit():
         try:
@@ -101,14 +103,14 @@ def sign_up():
 
         except IntegrityError:
             flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+            return render_template('users/signup.html', form=form, searchForm=searchForm)
 
         do_login(user)
 
         return redirect("/")
 
     else:
-        return render_template('users/signup.html', form=form)
+        return render_template('users/signup.html', form=form, searchForm=searchForm)
 
 
 @app.route("/logout")
@@ -125,18 +127,18 @@ def log_out():
 @app.route("/")
 def home_page():
     # cards = Card.where(q='set.name:generations supertype:pokemon')
+    energies = Type.all()
+    searchForm = SearchPokemon()
     set = Set.where(orderBy="releaseDate")
     user = g.user
     new_set = set[::-1]
     newest_series = new_set[0].series
     cards = Card.where(
         q=f'set.series:"{newest_series}"', orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
-
-    energies = Type.all()
-
+    
     exp_cards = Card.where(
         orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
-    return render_template('index.html', cards=cards, exp_cards=exp_cards, energies=energies, user=user)
+    return render_template('index.html', cards=cards, exp_cards=exp_cards, energies=energies, user=user, searchForm=searchForm)
 
 
 ##########################################################################
@@ -147,34 +149,61 @@ def home_page():
 def colorless_page(energy):
     user = g.user
     energies = Type.all()
+    searchForm = SearchPokemon()
 
     cards = Card.where(
         q=f'types:"{energy}"', orderBy="-set.releaseDate", page=1, pageSize=9)
-    return render_template('energies.html', energy=energy, energies=energies, cards=cards, user=user)
+    return render_template('/cards/energies.html', energy=energy, energies=energies, cards=cards, user=user, searchForm=searchForm)
+
+
+#######################################################################
+# search card page
+
+@app.route("/search", methods=["GET", "POST"])
+def search_page():
+
+    user = g.user
+    energies = Type.all()
+    searchForm = SearchPokemon()
+    if request.method == "POST":
+        if searchForm.validate_on_submit():
+            pokemon_search = searchForm.pokemon.data
+            pokemons = Card.where(
+                q=f'name:"{pokemon_search}"', page=1, pageSize=24)
+            return render_template('/cards/search_page.html', user=user, energies=energies, pokemons=pokemons, searchForm=searchForm)
+    return render_template('/', user=user, energies=energies, searchForm=searchForm, pokemons=pokemons)
 
 
 #######################################################################
 # each card pages
 
-@app.route("/cards/<int:card_id>")
+@app.route("/cards/<card_id>")
 def each_card(card_id):
 
+    # if not g.user:
+    #     flash("Access unauthorized.", "danger")
+    #     return render_template('each_card.html', )
     user = g.user
     energies = Type.all()
+    searchForm = SearchPokemon()
 
     card = Card.find(card_id)
+
+    if not g.user:
+
+        return render_template('/cards/each_card.html', card=card, searchForm=searchForm)
 
     card_owned_list = [c.card_id for c in g.user.card_owned]
 
     card_wanted_list = [c.card_id for c in g.user.card_wanted]
 
-    return render_template('each_card.html', card=card, energies=energies, card_owned_list=card_owned_list, card_wanted_list=card_wanted_list, user=user)
+    return render_template('/cards/each_card.html', card=card, energies=energies, card_owned_list=card_owned_list, card_wanted_list=card_wanted_list, user=user, searchForm=searchForm)
 
 
 ######################################################################
 # add card to user wanted model
 
-@app.route("/user/cards/wanted/<int:card_id>", methods=["POST"])
+@app.route("/user/cards/wanted/<card_id>", methods=["POST"])
 def want_card(card_id):
 
     user_id = g.user.id
@@ -197,7 +226,7 @@ def want_card(card_id):
 # add card to user owned model
 
 
-@app.route("/user/cards/owned/<int:card_id>", methods=["POST"])
+@app.route("/user/cards/owned/<card_id>", methods=["POST"])
 def owned_card(card_id):
 
     user_id = g.user.id
@@ -220,7 +249,7 @@ def owned_card(card_id):
 ######################################################################
 # delete card from user owned model
 
-@app.route("/user/cards/owned/<int:card_id>/delete", methods=["POST"])
+@app.route("/user/cards/owned/<card_id>/delete", methods=["POST"])
 def delete_ownedCard(card_id):
 
     user_id = g.user.id
@@ -240,7 +269,7 @@ def delete_ownedCard(card_id):
 ######################################################################
 # delete card from user wanted model
 
-@app.route("/user/cards/wanted/<int:card_id>/delete", methods=["POST"])
+@app.route("/user/cards/wanted/<card_id>/delete", methods=["POST"])
 def delete_wantedCard(card_id):
 
     user_id = g.user.id
@@ -269,6 +298,7 @@ def user_profile(user_id):
     user = g.user
     user_id = user.id
     energies = Type.all()
+    searchForm = SearchPokemon()
 
     card_api_list = []
 
@@ -284,7 +314,7 @@ def user_profile(user_id):
 
     self_posts = Post.query.filter_by(user_id=user_id).all()
 
-    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list, want_api_list=want_api_list, self_posts=self_posts, energies=energies)
+    return render_template("users/profile.html", user=user, user_id=user_id, owned_cards=owned_cards, card_api_list=card_api_list, want_api_list=want_api_list, self_posts=self_posts, energies=energies, searchForm=searchForm)
 
 
 ######################################################################
@@ -303,16 +333,19 @@ def new_post():
     user_id = g.user.id
 
     form = PostForm()
+    searchForm = SearchPokemon()
+    if request.method == "POST":
 
-    if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data,
-                    user_id=user_id, country=form.country.data)
-        db.session.add(post)
-        db.session.commit()
+        if form.validate_on_submit():
+            file = request.files['file']
+            post = Post(title=form.title.data, content=form.content.data,
+                        user_id=user_id, country=form.country.data, filename=file.filename, data=file.read())
+            db.session.add(post)
+            db.session.commit()
+            
+            return redirect(f"/user/{g.user.id}")
 
-        return redirect(f"/user/{g.user.id}")
-
-    return render_template('posts/new_post.html', user=user, form=form, energies=energies)
+    return render_template('posts/new_post.html', user=user, form=form, energies=energies, searchForm=searchForm)
 
 
 ######################################################################
@@ -332,15 +365,19 @@ def edit_post(post_id):
     user_id = g.user.id
 
     form = EditPost()
+    searchForm = SearchPokemon()
 
     if form.validate_on_submit():
-        post = Post.query.get(post_id)
-        post = Post(title=form.title.data, content=form.content.data,
-                    user_id=user_id, country=form.country.data)
-        db.session.update(post)
+
+        post.title = form.title.data
+        post.content = form.content.data
+        post.country = form.country.data
+
         db.session.commit()
+
         return redirect(f'/user/{user_id}')
-    return render_template('posts/edit_post.html', user=user, form=form, energies=energies, post=post)
+
+    return render_template('posts/edit_post.html', user=user, form=form, energies=energies, post=post, searchForm=searchForm)
 
 
 ######################################################################

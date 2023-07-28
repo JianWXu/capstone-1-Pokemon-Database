@@ -44,8 +44,15 @@
           <ul class="nav navbar-nav navbar-left">
             {% if request.endpoint != None %}            
             <li>
-              <form class="navbar-form navbar-left" action="/">
-                <input name="q" class="form-control" placeholder="Search Cards" id="search">
+              <form class="navbar-form navbar-left" action="/search" method="POST">
+                {{ searchForm.hidden_tag() }}
+
+                {% for field in searchForm if field.widget.input_type != 'hidden' %}
+                  {% for error in field.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                  {% endfor %}
+                  {{ field(placeholder="Enter a Pokémon Name", class="form-control", id="search") }}
+                {% endfor %}
                 <button class="btn btn-default" type="submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>

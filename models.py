@@ -71,6 +71,8 @@ class Post(db.Model):
     country = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.id', ondelete='CASCADE'))
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
     # card_id = db.Column(db.Text, nullable=False)
 
 

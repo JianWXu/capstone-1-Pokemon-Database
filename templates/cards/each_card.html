@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h1 id="each-cardh1">{{card.name}}</h1>
+
+
+<div class="container" id="each-card" class="card" style="width: 30rem;">
+    <img src="{{card.images.small}}" class="card-img-top" id="each-card" alt="{{card.name}}-card">
+    <div class="card-body">
+      <h5 class="card-title">${{card.tcgplayer.prices.holofoil.mid}} on TCGPlayer</h5>
+      <p class="card-text">{{ card.types|replace("['", "")|replace ("']", "")}}
+        <br>
+        {{card.evolvesTo}}
+        <br>
+        {{card.set.name}}
+        <br>
+        {{card.releaseDate}}
+        <br>
+        <a href="{{card.tcgplayer.url}}">{{card.tcgplayer.url}}</a>
+        <br><br>
+        <span>TCGPlayer price Updated On:{{card.tcgplayer.updatedAt}}</span></p>
+        
+        {% if user %}
+          {% if card.id in card_owned_list %}
+          <form method="POST" action="/user/cards/owned/{{card.id}}/delete">
+          <button class="btn btn-danger">Delete From Owned Cards</button>
+          </form>
+          {% else %}
+          <form method="POST" action="/user/cards/owned/{{card.id}}">
+          <button class="btn btn-outline-primary">Add to Owned Cards</button>
+          </form>
+          {% endif %}
+        {% endif %}
+
+        
+       
+        {% if user %}
+          {% if card.id in card_wanted_list %}
+          <form method="POST" action="/user/cards/wanted/{{card.id}}/delete">
+          <button class="btn btn-danger">Delete From Wanted Cards</button>
+          </form>
+          {% else %}
+          <form method="POST" action="/user/cards/wanted/{{card.id}}">
+          <button class="btn btn-outline-primary">Add to Wanted Cards</button>
+          </form>
+          {% endif %}
+        {% endif %}
+    </div>
+  </div>
+{% endblock %}

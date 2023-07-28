@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h1 id="searchh1">Search for {{searchForm.pokemon.data}}</h1>
+<div id="searchdiv" class="container">
+{% if pokemons|length > 0 %}
+    {% for pokemon in pokemons %}   
+        {% if loop.index0 % 3 == 0  %}
+            <div class="row">
+            <div class="col-md">        
+                <div class="search-card"><a href="/cards/{{pokemon.id}}"><img
+                    src="{{pokemon.images.small}}"
+                    class="card-img-top"
+                    alt="{{pokemon.name}}"
+                  /></a>
+                    
+                    <div class="card-body">
+                      <h5 class="card-title">{{pokemon.name}}</h5>
+                      <p class="card-text">{{pokemon.set.name}}</p>
+                      <p class="card-text">
+                        {% if pokemon.tcgplayer.prices %}
+                            {% if pokemon.tcgplayer.prices.holofoil %}
+                                ${{pokemon.tcgplayer.prices.holofoil.mid}}
+                            
+                        {% else %}
+                        No price available
+                        {% endif %}
+                        {% else %}
+                        No price available
+                        {% endif %}
+                      </p>
+                      <p class="card-text fw-light">
+                        TCGPlayer price Updated On:{{pokemon.tcgplayer.updatedAt}}
+                      </p>
+                      
+                    </div>
+                  </div>
+            </div>        
+        {% endif %}
+        {% if  loop.index0 % 3 == 1 %}
+            <div class="col-md">        
+                <div class="search-card"><a href="/cards/{{pokemon.id}}"><img
+                    src="{{pokemon.images.small}}"
+                    class="card-img-top"
+                    alt="{{pokemon.name}}"
+                  /></a>
+                    
+                    <div class="card-body">
+                      <h5 class="card-title">{{pokemon.name}}</h5>
+                      <p class="card-text">{{pokemon.set.name}}</p>
+                      <p class="card-text">
+                        {% if pokemon.tcgplayer.prices %}
+                            {% if pokemon.tcgplayer.prices.holofoil %}
+                                ${{pokemon.tcgplayer.prices.holofoil.mid}}
+                            
+                        {% else %}
+                        No price available
+                        {% endif %}
+                        {% else %}
+                        No price available
+                        {% endif %}
+                      </p>
+                      <p class="card-text fw-light">
+                        TCGPlayer price Updated On:{{pokemon.tcgplayer.updatedAt}}
+                      </p>
+                      
+                    </div>
+                  </div>
+            </div>
+        {% endif %}
+        {% if  loop.index0 % 3 == 2 %}
+            <div class="col-md">        
+                <div class="search-card"><a href="/cards/{{pokemon.id}}"><img
+                    src="{{pokemon.images.small}}"
+                    class="card-img-top"
+                    alt="{{pokemon.name}}"
+                  /></a>
+                    
+                    <div class="card-body">
+                      <h5 class="card-title">{{pokemon.name}}</h5>
+                      <p class="card-text">{{pokemon.set.name}}</p>
+                      <p class="card-text">
+                        {% if pokemon.tcgplayer.prices %}
+                            {% if pokemon.tcgplayer.prices.holofoil %}
+                                ${{pokemon.tcgplayer.prices.holofoil.mid}}
+                            
+                        {% else %}
+                        No price available
+                        {% endif %}
+                        {% else %}
+                        No price available
+                        {% endif %}
+                      </p>
+                      <p class="card-text fw-light">
+                        TCGPlayer price Updated On:{{pokemon.tcgplayer.updatedAt}}
+                      </p>
+                      
+                    </div>
+                  </div>
+            </div>
+        {% endif %}
+        {% if loop.index0 % 3 == 2 %}
+            </div>
+     {% endif %}
+    {% endfor %}
+    
+    </div>
+{% else %}
+    <h2>Sorry, card not found!</h2>
+{% endif %}
+</div>
+{% endblock %}

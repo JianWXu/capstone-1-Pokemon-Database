@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, EmailField, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, EmailField, SelectField, FileField
 from wtforms.validators import DataRequired, Email, Length
+from wtforms.fields import Field
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
 class LoginForm(FlaskForm):
@@ -26,6 +28,10 @@ class PostForm(FlaskForm):
     content = TextAreaField('Your Post Content', validators=[DataRequired()])
     country = SelectField('Country', choices=[
                           ('CA', 'Canada'), ('USA', 'United States of America')])
+    upload = FileField('Upload Photos', name="file", validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
+    ])
 
 
 class EditPost(FlaskForm):
@@ -35,3 +41,12 @@ class EditPost(FlaskForm):
     content = TextAreaField('Your Post Content', validators=[DataRequired()])
     country = SelectField('Country', choices=[
                           ('CA', 'Canada'), ('USA', 'United States of America')])
+
+
+class SearchPokemon(FlaskForm):
+    """Search for a pokemon"""
+
+    pokemon = StringField('', default='')
+
+    # def __call__(self, field, **kwargs):
+    #     return field.data if field.data else ""
