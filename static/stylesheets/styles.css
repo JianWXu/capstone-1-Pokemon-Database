@@ -508,3 +508,7 @@ td {
 #post-div #post {
   height: 6rem;
 }
+
+#upload-img img {
+  width: 30%;
+}

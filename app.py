@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session, url_for, g
 from flask_debugtoolbar import DebugToolbarExtension
 from dotenv import load_dotenv
 from models import db, connect_db, User, Post, UserCard, WantCard
@@ -10,19 +10,26 @@ import urllib.request
 import json
 import urllib.parse
 from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
+
+import psycopg2
+import psycopg2.extras
+from os.path import join, dirname, realpath
 
 CURR_USER_KEY = "curr_user"
+UPLOAD_FOLDER = 'static/uploads/'
 
 load_dotenv(override=True)
 pw = os.getenv("pw")
 api_pw = os.getenv("api_pw")
 
+conn = psycopg2.connect(password=pw)
 RestClient.configure(api_pw)
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{pw}@localhost/pokemon'
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.app_context().push()
 
@@ -135,7 +142,7 @@ def home_page():
     newest_series = new_set[0].series
     cards = Card.where(
         q=f'set.series:"{newest_series}"', orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
-    
+
     exp_cards = Card.where(
         orderBy="-tcgplayer.prices.holofoil.mid", page=1, pageSize=9)
     return render_template('index.html', cards=cards, exp_cards=exp_cards, energies=energies, user=user, searchForm=searchForm)
@@ -334,18 +341,64 @@ def new_post():
 
     form = PostForm()
     searchForm = SearchPokemon()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
     if request.method == "POST":
 
         if form.validate_on_submit():
             file = request.files['file']
+            if 'file' not in request.files:
+                flash('No file', category="danger")
+                return render_template('posts/new_post.html', user=user, form=form, energies=energies, searchForm=searchForm)
+            if file.filename == '':
+                flash('No image selected for uploading', category="danger")
+                return render_template('posts/new_post.html', user=user, form=form, energies=energies, searchForm=searchForm)
+
+            filename = secure_filename(file.filename)
+            # file.save(os.path.join(
+            #     app.config['UPLOAD_FOLDER'], str(user_id), filename))
+            UPLOADS_PATH = join(dirname(realpath(__file__)),
+                                "static/uploads/", str(user_id), filename)
+            # # print('upload_image filename: ' + filename)
+
             post = Post(title=form.title.data, content=form.content.data,
-                        user_id=user_id, country=form.country.data, filename=file.filename, data=file.read())
+                        user_id=user_id, country=form.country.data, filename=filename, data=file.read())
+
             db.session.add(post)
             db.session.commit()
-            
-            return redirect(f"/user/{g.user.id}")
-
+            flash('Image successfully uploaded and displayed below',
+                  category="success")
+            post_id = post.id
+            return redirect(f"/post/{post_id}")
+        else:
+            flash('Allowed image types are - png, jpg, jpeg, gif', category="danger")
+            return render_template('posts/new_post.html', user=user, form=form, energies=energies, searchForm=searchForm)
     return render_template('posts/new_post.html', user=user, form=form, energies=energies, searchForm=searchForm)
+
+
+######################################################################
+# show pictures uploaded by user
+
+@app.route('/post/<int:post_id>')
+def post_redirect(post_id):
+
+    user = g.user
+    energies = Type.all()
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/login")
+
+    user_id = g.user.id
+    searchForm = SearchPokemon()
+    post = Post.query.filter_by(user_id=user_id).all()
+
+    return render_template('posts/post.html', post=post, user=user, energies=energies, user_id=user_id, searchForm=searchForm)
+
+
+@app.route('/display/<filename>')
+def display_image(filename):
+    # print('display_image filename: ' + filename)
+    return redirect(url_for('static', filename='uploads/' + filename), code=301)
 
 
 ######################################################################
@@ -357,6 +410,8 @@ def edit_post(post_id):
     user = g.user
     energies = Type.all()
     post = Post.query.get(post_id)
+    file = post.filename
+    # filename = secure_filename(file.filename)
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -377,7 +432,7 @@ def edit_post(post_id):
 
         return redirect(f'/user/{user_id}')
 
-    return render_template('posts/edit_post.html', user=user, form=form, energies=energies, post=post, searchForm=searchForm)
+    return render_template('posts/edit_post.html', user=user, form=form, energies=energies, post=post, searchForm=searchForm, file=file)
 
 
 ######################################################################

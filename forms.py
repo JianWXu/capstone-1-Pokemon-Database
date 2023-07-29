@@ -30,7 +30,7 @@ class PostForm(FlaskForm):
                           ('CA', 'Canada'), ('USA', 'United States of America')])
     upload = FileField('Upload Photos', name="file", validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
+        FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')
     ])
 
 
@@ -41,6 +41,10 @@ class EditPost(FlaskForm):
     content = TextAreaField('Your Post Content', validators=[DataRequired()])
     country = SelectField('Country', choices=[
                           ('CA', 'Canada'), ('USA', 'United States of America')])
+    upload = FileField('Upload Photos', name="file", validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')
+    ])
 
 
 class SearchPokemon(FlaskForm):

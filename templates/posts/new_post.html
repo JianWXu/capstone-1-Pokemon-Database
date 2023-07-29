@@ -16,6 +16,11 @@
           {% endfor %}
           {{ field(placeholder=field.label.text, class="form-control") }}
         {% endfor %}
+        {% if filename %}
+        <div id="upload-img">
+            <img src="{{ url_for('display_image', filename=filename) }}">
+        </div>
+    {% endif %}
 
         <button class="btn btn-primary btn-block btn-lg">Make Post</button>
       </form>

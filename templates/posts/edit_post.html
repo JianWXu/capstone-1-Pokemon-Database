@@ -7,8 +7,12 @@
 <div class="row justify-content-md-center" id="login-div">
     <div class="col-md-7 col-lg-5">
       <h2>Edit This Post</h2>
-
-      <form method="POST" id="user_form">
+      {% if file %}        
+      <div id="upload-img">
+        <img src="/static/uploads/{{user_id}}/{{file}}">
+    </div>
+      {% endif %}
+      <form method="POST" id="user_form" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         {% for field in form if field.widget.input_type != 'hidden' %}

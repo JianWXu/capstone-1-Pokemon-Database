@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% for p in post %}
+{% if file %}        
+      <div id="upload-img">
+        <img src="/static/uploads/{{user_id}}/{{file}}">
+    </div>
+      {% endif %}
+{% endfor %}
+
+{% endblock %}
