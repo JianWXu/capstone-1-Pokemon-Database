@@ -1,55 +1,43 @@
-Pokémon TCG Database
+# Pokémon TCG Database
 
-Table of Contents
+## Table of Contents
 
-# Project Overview
-
-# Features
-
-# User Flow
-
-# Technology Stack
-
-# API Reference
-
-# Additional Notes
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [User Flow](#user-flow)
+- [API Reference](#api-reference)
+- [Additional Notes](#additional-notes)
 
 ## Project Overview
 
-The Pokémon Database Capstone is a web application designed to provide users with detailed information about various Pokémon. It serves as a comprehensive resource for Pokémon enthusiasts, allowing them to search for, view, and learn about different Pokémon in the database.
+The Pokémon TCG Database is a web application designed to provide users with detailed information about various Pokémon Trading Card Game cards. It serves as a comprehensive resource for Pokémon TCG enthusiasts, allowing them to search for, view, and learn about different cards in the database.
 
 ## Features
 
-Search Functionality: Users can search for Pokémon by name or type.
-Detailed Pokémon Information: Each Pokémon has a dedicated page that provides detailed information, including stats, abilities, and evolution.
-Responsive Design: The website is fully responsive, ensuring a seamless experience across all devices.
-Favorites: Users can add Pokémon to their favorites list for easy access later.
-Interactive UI: The website features an interactive user interface that enhances user engagement.
-These features were chosen to create an engaging and informative platform for Pokémon fans, allowing them to explore and interact with the Pokémon universe.
+- **Search Functionality:** Users can search for Pokémon TCG cards by name, type, or set.
+- **Detailed Card Information:** Each card has a dedicated page that provides detailed information, including stats, abilities, and artwork.
+- **User Accounts:** Users can create accounts to save their favorite cards and build decks.
+- **Responsive Design:** The website is fully responsive, ensuring a seamless experience across all devices.
 
 ## User Flow
 
-Homepage: Users are greeted with a search bar where they can enter the name or type of a Pokémon.
-Search Results: The search results display a list of Pokémon that match the user's query.
-Pokémon Details Page: Clicking on a Pokémon from the search results takes the user to a detailed page with comprehensive information about that Pokémon.
-Favorites: Users can add Pokémon to their favorites list by clicking the "Add to Favorites" button on the Pokémon's detail page.
-Navigation: The website includes a navigation menu that allows users to easily access different sections, including their favorites.
-Technology Stack
-Frontend: HTML, CSS, JavaScript, React
-Backend: Node.js, Express.js
-Database: MongoDB
-API: Pokémon API (PokeAPI)
-Deployment: GitHub Pages
-API Reference
-This project utilizes the PokeAPI to retrieve Pokémon data. The API provides comprehensive details about each Pokémon, including stats, abilities, and evolution chains.
+1. **Homepage:** Users are greeted with a search bar where they can enter the name or type of a card.
+2. **Search Results:** The search results display a list of cards that match the user's query.
+3. **Card Details Page:** Clicking on a card from the search results takes the user to a detailed page with comprehensive information about that card.
+4. **User Account:** Users can create an account to save their favorite cards and build decks.
 
-## Example API Call
+## API Reference
 
-javascript
-Copy code
-fetch('https://pokeapi.co/api/v2/pokemon/pikachu')
-.then(response => response.json())
-.then(data => console.log(data));
+The project utilizes the [PokéAPI](https://pokeapi.co/) to retrieve Pokémon TCG card data.
+
+### Example API Call
+
+```javascript
+fetch("https://api.pokemontcg.io/v2/cards/pikachu")
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
 This API call fetches data for the Pokémon Pikachu.
 
 ## Additional Notes
